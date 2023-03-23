@@ -38,8 +38,12 @@ while True:
 
     if event == "check":
         try:
-            box = datas[value["outlet id"]]
-            sg.popup(f"The key is in Box {box}.")
+            user_input = value["outlet id"]
+            if user_input.isdigit():
+                box = datas[a]
+                sg.popup(f"The key is in Box {box}.")
+            else:
+                sg.popup("Our outlets ID contains only digit")
         except KeyError:
             sg.popup("Outlet Key not present in Keybox.")
 
@@ -62,9 +66,13 @@ while True:
             sg.popup("Please enter valid outlet ID")
         elif len(keybox_to_add) != 1:
             sg.popup("Remember to input only keybox id e.g input C, for Box C")
-        else:
+        elif outlet_to_add.isdigit():
             datas[outlet_to_add] = keybox_to_add
             print(datas)
+        else:
+            sg.popup("Our outlets ID contains only digit")
+
+
 
     if event == "delete":
         outlet_to_delete = value['ID_to_reg']
