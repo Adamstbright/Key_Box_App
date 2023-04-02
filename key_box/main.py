@@ -1,4 +1,7 @@
 import PySimpleGUI as sg
+from functions import get_key_in_dict, new_file_content, append_new_key, get_key_in_list, delete_key
+
+sg.theme("TealMono")
 
 sg.popup("Welcome to Midas Keybox App", text_color="Blue", background_color="white")
 
@@ -25,7 +28,6 @@ layout = [[sg.Column(layout1, key='-COL1-'), sg.Column(layout2, visible=False, k
 
 window = sg.Window("Midas Keybox App", layout)
 
-datas = {"2300115": "A", "2300123": "B", "2300998": "C", "2300114": "K"}
 
 layout = 1
 while True:
@@ -40,7 +42,8 @@ while True:
         try:
             user_input = value["outlet id"]
             if user_input.isdigit():
-                box = datas[a]
+                datas = get_key_in_dict()
+                box = datas[user_input]
                 sg.popup(f"The key is in Box {box}.")
             else:
                 sg.popup("Our outlets ID contains only digit")
@@ -58,23 +61,27 @@ while True:
         window[f'-COL{layout}-'].update(visible=True)
 
     if event == "add":
+        datas = get_key_in_dict()
         outlet_to_add = value["ID_to_reg"]
         keybox_to_add = value["Keybox"].capitalize()
-        if len(outlet_to_add) > 8:
-            sg.popup("Please enter valid outlet ID")
-        elif len(outlet_to_add) < 7:
-            sg.popup("Please enter valid outlet ID")
-        elif len(keybox_to_add) != 1:
-            sg.popup("Remember to input only keybox id e.g input C, for Box C")
-        elif outlet_to_add.isdigit():
-            datas[outlet_to_add] = keybox_to_add
-            print(datas)
+        if outlet_to_add in datas.keys():
+            sg.popup("Outlet key already exist!")
         else:
-            sg.popup("Our outlets ID contains only digit")
-
-
+            if len(outlet_to_add) > 8:
+                sg.popup("Please enter valid outlet ID")
+            elif len(outlet_to_add) < 7:
+                sg.popup("Please enter valid outlet ID")
+            elif len(keybox_to_add) != 1:
+                sg.popup("Remember to input only keybox id e.g input C, for Box C")
+            elif outlet_to_add.isdigit():
+                details_to_add = [outlet_to_add, keybox_to_add]
+                append_new_key(details_to_add)
+                sg.popup("Out successfully added")
+            else:
+                sg.popup("Our outlets ID contains only digit")
 
     if event == "delete":
+        datas = get_key_in_dict()
         outlet_to_delete = value['ID_to_reg']
         if outlet_to_delete not in datas.keys():
             sg.popup("Outlet does not Exist")
@@ -83,6 +90,9 @@ while True:
         elif len(outlet_to_delete) < 7:
             sg.popup("Please enter valid outlet ID")
         else:
-            del datas[outlet_to_delete]
+            data = get_key_in_list()
+            new_data = delete_key(data, outlet_to_delete)
+            new_file_content(new_data)
+            sg.popup("Outlet successfully deleted!")
 
 window.close()
