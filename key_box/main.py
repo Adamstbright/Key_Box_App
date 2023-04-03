@@ -41,6 +41,8 @@ while True:
     if event == "check":
         try:
             user_input = value["outlet id"]
+            if not user_input.startswith("230"):
+                sg.popup("This is not Midas outlet ID")
             if user_input.isdigit():
                 datas = get_key_in_dict()
                 box = datas[user_input]
