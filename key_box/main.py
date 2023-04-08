@@ -32,8 +32,6 @@ window = sg.Window("Midas Keybox App", layout)
 layout = 1
 while True:
     event, value = window.read()
-    print(event, value)
-    print(type(event))
 
     if event in (None, 'Exit'):
         break

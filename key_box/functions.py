@@ -29,10 +29,17 @@ def new_file_content(content):
 
 
 def delete_key(content, outlet_to_delete):
-    [content.remove(value) if value[0] == outlet_to_delete else exit for value in content]
+    for value in content:
+        if value[0] == outlet_to_delete:
+            content.remove(value)
+        else:
+            pass
     return content
 
 
+
 if __name__ == "__main__":
-    print(get_key_in_list())
+    print(get_key_in_list)
     print(get_key_in_dict())
+
+
